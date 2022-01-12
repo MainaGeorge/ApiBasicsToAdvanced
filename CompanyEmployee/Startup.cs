@@ -29,6 +29,7 @@ namespace CompanyEmployee
             services.ConfigureCors();
             services.ConfigureIisIntegration();
             services.ConfigureLoggerService();
+            services.ConfigureSqlContext(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CompanyEmployee", Version = "v1" });
