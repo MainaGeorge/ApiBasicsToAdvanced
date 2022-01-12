@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Contracts;
+using LoggingService;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CompanyEmployee.Extensions
@@ -21,6 +23,11 @@ namespace CompanyEmployee.Extensions
         public static void ConfigureIisIntegration(this IServiceCollection services)
         {
             services.Configure<IISOptions>(options => { });
+        }
+
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            services.AddScoped<ILoggerManager, LoggerManager>();
         }
     }
 }
