@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CompanyEmployee.Extensions
+namespace CompanyEmployees.Extensions
 {
     public static class ServiceExtensions
     {
@@ -41,6 +41,7 @@ namespace CompanyEmployee.Extensions
                 {
                     settings.EnableRetryOnFailure();
                     settings.CommandTimeout(10);
+                    settings.MigrationsAssembly("CompanyEmployees");
                 });
             });
         }

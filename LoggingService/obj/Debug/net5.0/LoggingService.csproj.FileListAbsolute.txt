@@ -1,0 +1,15 @@
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\LoggingService.deps.json
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\LoggingService.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\ref\LoggingService.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\LoggingService.pdb
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\Contracts.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\Contracts.pdb
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.csproj.AssemblyReference.cache
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.AssemblyInfoInputs.cache
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.AssemblyInfo.cs
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.csproj.CoreCompileInputs.cache
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.csproj.CopyComplete
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\ref\LoggingService.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.pdb

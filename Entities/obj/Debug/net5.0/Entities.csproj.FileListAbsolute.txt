@@ -1,0 +1,12 @@
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\bin\Debug\net5.0\Entities.deps.json
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\bin\Debug\net5.0\Entities.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\bin\Debug\net5.0\ref\Entities.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\bin\Debug\net5.0\Entities.pdb
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.csproj.AssemblyReference.cache
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.AssemblyInfoInputs.cache
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.AssemblyInfo.cs
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.csproj.CoreCompileInputs.cache
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\ref\Entities.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\Entities\obj\Debug\net5.0\Entities.pdb
