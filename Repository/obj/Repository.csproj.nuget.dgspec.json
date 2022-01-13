@@ -30,7 +30,11 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\george.maina\\Desktop\\CompanyEmployee\\Entities\\Entities.csproj": {
+                "projectPath": "C:\\Users\\george.maina\\Desktop\\CompanyEmployee\\Entities\\Entities.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

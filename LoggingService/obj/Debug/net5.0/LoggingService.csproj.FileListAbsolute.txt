@@ -13,3 +13,5 @@ C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\Lo
 C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.dll
 C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\ref\LoggingService.dll
 C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\obj\Debug\net5.0\LoggingService.pdb
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\Entities.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\LoggingService\bin\Debug\net5.0\Entities.pdb

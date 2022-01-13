@@ -10,3 +10,6 @@ C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\obj\Debug\net5.0\Contrac
 C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\obj\Debug\net5.0\Contracts.dll
 C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\obj\Debug\net5.0\ref\Contracts.dll
 C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\obj\Debug\net5.0\Contracts.pdb
+C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\bin\Debug\net5.0\Entities.dll
+C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\bin\Debug\net5.0\Entities.pdb
+C:\Users\george.maina\Desktop\CompanyEmployee\Contracts\obj\Debug\net5.0\Contracts.csproj.CopyComplete
