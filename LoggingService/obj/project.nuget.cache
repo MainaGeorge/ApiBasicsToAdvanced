@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "VDTwNAslFPYSvJM00WVRY9ejag29X0OL7l3IRNYmmp3fv81NMayELeKXHVISjPb8+R0KfAOqtQXs98MIgW9Clg==",
+  "dgSpecHash": "KqNryCihMk3w1/uZXHCwZw9l7afDZD2gNlY5ay4XiHj3BTwCMK8wMg3SYVzJQSr53evlU/2yqLL5z56bdn6qNg==",
   "success": true,
   "projectFilePath": "C:\\Users\\george.maina\\Desktop\\CompanyEmployee\\LoggingService\\LoggingService.csproj",
   "expectedPackageFiles": [
@@ -18,6 +18,7 @@
     "C:\\Users\\george.maina\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\nlog\\4.7.13\\nlog.4.7.13.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\nlog.extensions.logging\\1.7.4\\nlog.extensions.logging.1.7.4.nupkg.sha512",
+    "C:\\Users\\george.maina\\.nuget\\packages\\nlog.web.aspnetcore\\4.14.0\\nlog.web.aspnetcore.4.14.0.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512"
