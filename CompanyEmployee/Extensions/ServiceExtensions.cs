@@ -66,7 +66,11 @@ namespace CompanyEmployees.Extensions
 
         public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)
         {
-            return builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+            return builder.AddMvcOptions(config =>
+            {
+                config.OutputFormatters.Add(new CsvCompaniesOutputFormatter());
+                config.OutputFormatters.Add(new CsvEmployeesOutputFormatter());
+            });
         }
     }
 }

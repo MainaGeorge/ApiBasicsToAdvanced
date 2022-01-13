@@ -9,9 +9,9 @@ using Microsoft.Net.Http.Headers;
 
 namespace CompanyEmployees.CustomOutputFormatters
 {
-    public class CsvOutputFormatter : TextOutputFormatter
+    public class CsvCompaniesOutputFormatter : TextOutputFormatter
     {
-        public CsvOutputFormatter()
+        public CsvCompaniesOutputFormatter()
         {
             SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv"));
             SupportedEncodings.Add(Encoding.UTF8);
