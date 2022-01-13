@@ -33,7 +33,7 @@ namespace CompanyEmployees.Controllers
             return Ok(companiesDto);
         }
 
-        [HttpGet("{companyId}")]
+        [HttpGet("{companyId:guid}")]
         public IActionResult GetCompany(Guid companyId)
         {
             var company = _repoManager.Company.GetCompany(companyId, false);
