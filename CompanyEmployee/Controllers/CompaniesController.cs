@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
+using CompanyEmployees.ModelBinders;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
@@ -44,6 +46,29 @@ namespace CompanyEmployees.Controllers
             return NotFound();
         }
 
+        [HttpGet("collection/({companyIds})", Name = nameof(GetCompanyCollection))]
+        public IActionResult GetCompanyCollection(
+            [ModelBinder(BinderType = typeof(ConvertGuidIdsToIEnumerableOfGuidModelBinder))] IEnumerable<Guid> companyIds)
+        {
+            if (companyIds is not Guid[] idsArray)
+            {
+                _logger.LogError("Parameter 'companyIds' is null");
+                return BadRequest("Parameter 'companyIds' is null");
+            }
+
+            var companyEntities = _repoManager.Company.GetByIds(idsArray, false);
+
+            if (idsArray.Length != companyEntities.Count())
+            {
+                _logger.LogError("Some ids in the companyIds parameter are invalid");
+                return NotFound();
+            }
+
+            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
+
+            return Ok(companiesToReturn);
+        }
+
         [HttpPost]
         public IActionResult CreateCompany([FromBody] CompanyForCreationDto company)
         {
@@ -60,6 +85,26 @@ namespace CompanyEmployees.Controllers
             var companyToReturn = _mapper.Map<CompanyDto>(companyEntity);
 
             return CreatedAtRoute(nameof(GetCompany), new { companyId = companyEntity.Id }, companyToReturn);
+        }
+
+        [HttpPost("collection")]
+        public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection)
+        {
+            if (companyCollection is null)
+            {
+                _logger.LogError("Company collection sent from client is null");
+                return BadRequest("companyCollection is null");
+            }
+
+            var companyEntities = _mapper.Map<IEnumerable<Company>>(companyCollection);
+            var createdCompanies = companyEntities as List<Company> ?? companyEntities.ToList();
+            createdCompanies.ForEach(c => _repoManager.Company.CreateCompany(c));
+            _repoManager.Save();
+
+            var ids = string.Join(',', createdCompanies.Select(c => c.Id));
+            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(createdCompanies);
+
+            return CreatedAtRoute(nameof(GetCompanyCollection), new { companyIds = ids }, companiesToReturn);
         }
     }
 }
