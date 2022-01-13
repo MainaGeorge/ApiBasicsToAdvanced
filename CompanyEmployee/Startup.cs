@@ -26,7 +26,7 @@ namespace CompanyEmployees
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.ConfigureControllers();
             services.ConfigureCors();
             services.ConfigureIisIntegration();
             services.ConfigureLoggerService();

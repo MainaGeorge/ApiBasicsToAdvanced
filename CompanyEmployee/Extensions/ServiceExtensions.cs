@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using CompanyEmployees.CustomOutputFormatters;
+using Contracts;
 using Entities;
 using LoggingService;
 using Microsoft.AspNetCore.Builder;
@@ -50,6 +51,22 @@ namespace CompanyEmployees.Extensions
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+        }
+
+        public static void ConfigureControllers(this IServiceCollection services)
+        {
+            services.AddControllers(options =>
+                    {
+                        options.RespectBrowserAcceptHeader = true;
+                        options.ReturnHttpNotAcceptable = true;
+                    })
+                .AddXmlDataContractSerializerFormatters()
+                .AddCustomCsvFormatter();
+        }
+
+        public static IMvcBuilder AddCustomCsvFormatter(this IMvcBuilder builder)
+        {
+            return builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
         }
     }
 }
