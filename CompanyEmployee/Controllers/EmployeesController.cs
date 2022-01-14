@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CompanyEmployees.ActionFilters;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
@@ -59,14 +60,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> CreateEmployeeForCompany([FromRoute] Guid companyId, [FromBody] EmployeeForCreationDto employeeDto)
         {
-            if (employeeDto is null)
-            {
-                _logger.LogError("EmployeeForCreationDto from the client was null");
-                return BadRequest("EmployeeForCreationDto object is null");
-            }
-
             var company = await _repoManager.Company.GetCompany(companyId, false);
             if (company == null)
             {
@@ -109,14 +105,10 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPut("{employeeId:guid}")]
+        [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> UpdateEmployeeForCompany(Guid companyId, Guid employeeId,
             [FromBody] EmployeeForUpdatingDto employeeForUpdatingDto)
         {
-            if (employeeForUpdatingDto is null)
-            {
-                _logger.LogError("EmployeeForCreationDto from the client was null");
-                return BadRequest("EmployeeForCreationDto object is null");
-            }
 
             var company = await _repoManager.Company.GetCompany(companyId, false);
             if (company == null)
@@ -139,15 +131,10 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPatch("{employeeId:guid}")]
+        [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(Guid companyId, Guid employeeId,
             [FromBody] JsonPatchDocument<EmployeeForUpdatingDto> patchDoc)
         {
-            if (patchDoc is null)
-            {
-                _logger.LogError("EmployeeForCreationDto from the client was null");
-                return BadRequest("EmployeeForCreationDto object is null");
-            }
-
             var company = await _repoManager.Company.GetCompany(companyId, false);
             if (company == null)
             {

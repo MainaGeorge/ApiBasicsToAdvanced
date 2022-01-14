@@ -1,4 +1,5 @@
 using System.IO;
+using CompanyEmployees.ActionFilters;
 using CompanyEmployees.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,7 @@ namespace CompanyEmployees
             services.ConfigureControllers();
             services.ConfigureApiBehaviour();
             services.ConfigureCors();
+            services.AddScoped<ValidateModelState>();
             services.ConfigureIisIntegration();
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);

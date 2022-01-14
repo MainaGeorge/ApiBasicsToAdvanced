@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CompanyEmployees.ActionFilters;
 using CompanyEmployees.ModelBinders;
 using Contracts;
 using Entities.DataTransferObjects;
@@ -72,14 +73,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
-            if (company is null)
-            {
-                _logger.LogError("CompanyForCreationDto sent from the client is null");
-                return BadRequest("CompanyForCreation object is null");
-            }
-
             var companyEntity = _mapper.Map<Company>(company);
             _repoManager.Company.CreateCompany(companyEntity);
             await _repoManager.SaveAsync();
@@ -126,14 +122,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPut("{companyId:guid}")]
+        [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> UpdateCompany(Guid companyId, [FromBody] CompanyForUpdatingDto companyForUpdatingDto)
         {
-            if (companyForUpdatingDto is null)
-            {
-                _logger.LogError("CompanyForUpdatingDto from the client was null");
-                return BadRequest($"object {nameof(companyForUpdatingDto)} can not be null");
-            }
-
             var company = await _repoManager.Company.GetCompany(companyId, true);
             if (company is null)
             {
@@ -148,6 +139,7 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPatch("{companyId:guid}")]
+        [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> PartiallyUpdateCompany(Guid companyId,
             [FromBody] JsonPatchDocument<CompanyForUpdatingDto> patchDoc)
         {

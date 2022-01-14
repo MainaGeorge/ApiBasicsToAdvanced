@@ -79,7 +79,7 @@ namespace CompanyEmployees.Extensions
         {
             services.Configure<ApiBehaviorOptions>(opt =>
             {
-                opt.SuppressModelStateInvalidFilter = false;
+                opt.SuppressModelStateInvalidFilter = true;
             });
         }
     }
