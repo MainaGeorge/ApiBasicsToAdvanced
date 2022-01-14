@@ -6,8 +6,10 @@ using CompanyEmployees.ActionFilters;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.Paging;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CompanyEmployees.Controllers
 {
@@ -28,11 +30,15 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
+        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId,
+            [FromQuery] EmployeeRequestParameters requestParameters)
         {
             var _ = HttpContext.Items["company"] as Company;
 
-            var employeesFromDb = await _repoManager.Employee.GetEmployees(companyId, false);
+            var employeesFromDb = await _repoManager.Employee.GetEmployeesAsync(companyId, requestParameters, false);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(employeesFromDb.MetaData));
+
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb));
         }
 

@@ -26,7 +26,7 @@ namespace CompanyEmployees.ActionFilters
                 return;
             }
 
-            var employee = await Repo.Employee.GetEmployee(companyId, employeeId, trackChanges);
+            var employee = await Repo.Employee.GetEmployeeAsync(companyId, employeeId, trackChanges);
             if (employee is null)
             {
                 Logger.LogInfo($"Employee with id: {employeeId} doesn't exist in the database.");

@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.Paging;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository
@@ -14,12 +15,21 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployees(Guid companyId, bool trackChanges)
+        public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeRequestParameters requestParameters,
+            bool trackChanges)
         {
-            return await FindByCondition(e => e.CompanyId == companyId, trackChanges).ToListAsync();
+            var employees = await FindByCondition(e => e.CompanyId == companyId, trackChanges)
+                .OrderBy(e => e.Name)
+                .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
+                .Take(requestParameters.PageSize)
+                .ToListAsync();
+
+            var count = await FindByCondition(e => e.CompanyId == companyId, trackChanges).CountAsync();
+
+            return PagedList<Employee>.ToPagedList(employees, requestParameters.PageNumber, requestParameters.PageSize, count);
         }
 
-        public async Task<Employee> GetEmployee(Guid companyId, Guid employeeId, bool trackChanges)
+        public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges)
         {
             return await FindByCondition(e => e.CompanyId == companyId && e.Id == employeeId, trackChanges)
                 .SingleOrDefaultAsync();

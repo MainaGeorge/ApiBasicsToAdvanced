@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Models;
+using Entities.Paging;
 
 namespace Contracts
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<Employee>> GetEmployees(Guid companyId, bool trackChanges);
-        Task<Employee> GetEmployee(Guid companyId, Guid employeeId, bool trackChanges);
+        Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeRequestParameters requestParameters,
+            bool trackChanges);
+        Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChanges);
         void CreateEmployeeForCompany(Guid companyId, Employee employee);
         void DeleteEmployee(Employee employee);
     }
