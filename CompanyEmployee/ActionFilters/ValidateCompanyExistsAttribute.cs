@@ -6,30 +6,22 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CompanyEmployees.ActionFilters
 {
-    public class ValidateCompanyExistsAttribute : IAsyncActionFilter
+    public class ValidateCompanyExistsAttribute : ValidateExists, IAsyncActionFilter
     {
-        private readonly ILoggerManager _logger;
-        private readonly IRepositoryManager _repo;
 
-        public ValidateCompanyExistsAttribute(ILoggerManager logger, IRepositoryManager repo)
+        public ValidateCompanyExistsAttribute(ILoggerManager logger, IRepositoryManager repo) : base(logger, repo)
         {
-            _logger = logger;
-            _repo = repo;
         }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var httpMethod = context.HttpContext.Request.Method;
-            var trackChanges =
-                httpMethod.Equals("PUT", StringComparison.InvariantCultureIgnoreCase)
-                || httpMethod.Equals("PATCH", StringComparison.InvariantCultureIgnoreCase);
 
-            var companyId = (Guid)context.ActionArguments["companyId"];
-
-            var company = await _repo.Company.GetCompany(companyId, trackChanges);
+            var companyId = GetId(context, "companyId");
+            var trackChanges = TrackChanges(context);
+            var company = await Repo.Company.GetCompany(companyId, trackChanges);
 
             if (company is null)
             {
-                _logger.LogInfo($"company with id {companyId} does not exist");
+                Logger.LogInfo($"company with id {companyId} does not exist");
                 context.Result = new NotFoundResult();
             }
             else

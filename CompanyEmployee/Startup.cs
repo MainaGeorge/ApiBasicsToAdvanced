@@ -32,6 +32,7 @@ namespace CompanyEmployees
             services.ConfigureCors();
             services.AddScoped<ValidateModelState>();
             services.AddScoped<ValidateCompanyExistsAttribute>();
+            services.AddScoped<ValidateEmployeeExistsAttribute>();
             services.ConfigureIisIntegration();
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);

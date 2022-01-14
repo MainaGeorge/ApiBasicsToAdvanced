@@ -43,10 +43,9 @@ namespace CompanyEmployees.Controllers
         [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
         public IActionResult GetCompany(Guid companyId)
         {
-            if (HttpContext.Items["company"] is Company company) return Ok(_mapper.Map<CompanyDto>(company));
+            var company = HttpContext.Items["company"] as Company;
 
-            _logger.LogInfo($"company with id {companyId} doesn't exist in the database");
-            return NotFound();
+            return Ok(_mapper.Map<CompanyDto>(company));
         }
 
         [HttpGet("collection/({companyIds})", Name = nameof(GetCompanyCollection))]
