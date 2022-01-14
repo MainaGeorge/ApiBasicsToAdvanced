@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -13,15 +14,15 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges)
+        public async Task<IEnumerable<Employee>> GetEmployees(Guid companyId, bool trackChanges)
         {
-            return FindByCondition(e => e.CompanyId == companyId, trackChanges);
+            return await FindByCondition(e => e.CompanyId == companyId, trackChanges).ToListAsync();
         }
 
-        public Employee GetEmployee(Guid companyId, Guid employeeId, bool trackChanges)
+        public async Task<Employee> GetEmployee(Guid companyId, Guid employeeId, bool trackChanges)
         {
-            return FindByCondition(e => e.CompanyId == companyId && e.Id == employeeId, trackChanges)
-                .SingleOrDefault();
+            return await FindByCondition(e => e.CompanyId == companyId && e.Id == employeeId, trackChanges)
+                .SingleOrDefaultAsync();
         }
 
         public void CreateEmployeeForCompany(Guid companyId, Employee employee)
