@@ -14,6 +14,8 @@ namespace CompanyEmployees.MappingProfiles
             CreateMap<Employee, EmployeeDto>();
             CreateMap<CompanyForCreationDto, Company>();
             CreateMap<EmployeeForCreationDto, Employee>();
+            CreateMap<EmployeeForUpdatingDto, Employee>();
+            CreateMap<CompanyForUpdatingDto, Company>();
         }
     }
 }
