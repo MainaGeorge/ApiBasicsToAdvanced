@@ -4,6 +4,7 @@ using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployees.Controllers
@@ -130,6 +131,39 @@ namespace CompanyEmployees.Controllers
             }
 
             _mapper.Map(employeeForUpdatingDto, employeeEntity);
+            _repoManager.Save();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{employeeId:guid}")]
+        public IActionResult PartiallyUpdateEmployeeForCompany(Guid companyId, Guid employeeId,
+            [FromBody] JsonPatchDocument<EmployeeForUpdatingDto> patchDoc)
+        {
+            if (patchDoc is null)
+            {
+                _logger.LogError("EmployeeForCreationDto from the client was null");
+                return BadRequest("EmployeeForCreationDto object is null");
+            }
+
+            var company = _repoManager.Company.GetCompany(companyId, false);
+            if (company == null)
+            {
+                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
+                return NotFound();
+            }
+
+            var employeeEntity = _repoManager.Employee.GetEmployee(companyId, employeeId, true);
+            if (employeeEntity is null)
+            {
+                _logger.LogWarning($"Employee with id: {employeeId} doesn't exist in the database");
+                return NotFound();
+            }
+
+            var employeeToPatch = _mapper.Map<EmployeeForUpdatingDto>(employeeEntity);
+            patchDoc.ApplyTo(employeeToPatch);
+
+            _mapper.Map(employeeToPatch, employeeEntity);
             _repoManager.Save();
 
             return NoContent();

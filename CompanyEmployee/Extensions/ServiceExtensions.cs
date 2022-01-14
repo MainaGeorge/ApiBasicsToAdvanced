@@ -60,6 +60,7 @@ namespace CompanyEmployees.Extensions
                         options.RespectBrowserAcceptHeader = true;
                         options.ReturnHttpNotAcceptable = true;
                     })
+                .AddNewtonsoftJson()
                 .AddXmlDataContractSerializerFormatters()
                 .AddCustomCsvFormatter();
         }
