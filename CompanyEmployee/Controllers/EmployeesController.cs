@@ -13,6 +13,7 @@ namespace CompanyEmployees.Controllers
 {
     [Route("api/companies/{companyId:guid}/employees")]
     [ApiController]
+    [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
     public class EmployeesController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;
@@ -29,12 +30,7 @@ namespace CompanyEmployees.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
         {
-            var company = await _repoManager.Company.GetCompany(companyId, false);
-            if (company == null)
-            {
-                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
-                return NotFound();
-            }
+            var _ = HttpContext.Items["company"] as Company;
 
             var employeesFromDb = await _repoManager.Employee.GetEmployees(companyId, false);
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb));
@@ -43,13 +39,7 @@ namespace CompanyEmployees.Controllers
         [HttpGet("{employeeId:guid}", Name = nameof(GetEmployeeForCompany))]
         public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid employeeId)
         {
-            var company = await _repoManager.Company.GetCompany(companyId, false);
-            if (company == null)
-            {
-                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
-                return NotFound();
-            }
-
+            var _ = HttpContext.Items["company"] as Company;
             var employeeFromDb = await _repoManager.Employee.GetEmployee(companyId, employeeId, false);
 
             if (employeeFromDb != null) return Ok(_mapper.Map<EmployeeDto>(employeeFromDb));
@@ -63,13 +53,7 @@ namespace CompanyEmployees.Controllers
         [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> CreateEmployeeForCompany([FromRoute] Guid companyId, [FromBody] EmployeeForCreationDto employeeDto)
         {
-            var company = await _repoManager.Company.GetCompany(companyId, false);
-            if (company == null)
-            {
-                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
-                return NotFound();
-            }
-
+            var _ = HttpContext.Items["company"] as Company;
             var employeeEntity = _mapper.Map<Employee>(employeeDto);
 
             _repoManager.Employee.CreateEmployeeForCompany(companyId, employeeEntity);
@@ -82,13 +66,7 @@ namespace CompanyEmployees.Controllers
         [HttpDelete("{employeeId:guid}")]
         public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid employeeId)
         {
-            var company = await _repoManager.Company.GetCompany(companyId, false);
-            if (company == null)
-            {
-                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
-                return NotFound();
-            }
-
+            var _ = HttpContext.Items["company"] as Company;
             var employeeFromDb = await _repoManager.Employee.GetEmployee(companyId, employeeId, false);
 
             if (employeeFromDb is null)
@@ -110,13 +88,7 @@ namespace CompanyEmployees.Controllers
             [FromBody] EmployeeForUpdatingDto employeeForUpdatingDto)
         {
 
-            var company = await _repoManager.Company.GetCompany(companyId, false);
-            if (company == null)
-            {
-                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
-                return NotFound();
-            }
-
+            var _ = HttpContext.Items["company"] as Company;
             var employeeEntity = await _repoManager.Employee.GetEmployee(companyId, employeeId, true);
             if (employeeEntity is null)
             {
@@ -135,13 +107,7 @@ namespace CompanyEmployees.Controllers
         public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(Guid companyId, Guid employeeId,
             [FromBody] JsonPatchDocument<EmployeeForUpdatingDto> patchDoc)
         {
-            var company = await _repoManager.Company.GetCompany(companyId, false);
-            if (company == null)
-            {
-                _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database");
-                return NotFound();
-            }
-
+            var _ = HttpContext.Items["company"] as Company;
             var employeeEntity = await _repoManager.Employee.GetEmployee(companyId, employeeId, true);
             if (employeeEntity is null)
             {
