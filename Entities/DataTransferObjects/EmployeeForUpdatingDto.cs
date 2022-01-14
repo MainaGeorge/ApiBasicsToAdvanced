@@ -1,9 +1,6 @@
 ﻿namespace Entities.DataTransferObjects
 {
-    public class EmployeeForUpdatingDto
+    public class EmployeeForUpdatingDto : EmployeeForManipulationDto
     {
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public string Position { get; set; }
     }
 }

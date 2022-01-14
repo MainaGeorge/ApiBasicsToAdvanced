@@ -165,7 +165,15 @@ namespace CompanyEmployees.Controllers
 
             var companyToPatch = _mapper.Map<CompanyForUpdatingDto>(company);
 
-            patchDoc.ApplyTo(companyToPatch);
+            patchDoc.ApplyTo(companyToPatch, ModelState);
+
+            TryValidateModel(ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the patch document");
+                return UnprocessableEntity(ModelState);
+            }
 
             _mapper.Map(companyToPatch, company);
             _repoManager.Save();

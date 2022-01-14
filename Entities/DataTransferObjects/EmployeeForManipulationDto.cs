@@ -1,14 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Models
+namespace Entities.DataTransferObjects
 {
-    public class Employee
+    public abstract class EmployeeForManipulationDto
     {
-        [Column("EmployeeId")]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "Employee name is a required field")]
         [MaxLength(30, ErrorMessage = "Maximum Length for the name is 30 characters")]
         public string Name { get; set; }
@@ -19,10 +14,5 @@ namespace Entities.Models
         [Required(ErrorMessage = "Position is a required field")]
         [MaxLength(20, ErrorMessage = "Maximum length for the position field is 20 characters")]
         public string Position { get; set; }
-
-        [ForeignKey(nameof(Company))]
-        public Guid CompanyId { get; set; }
-
-        public virtual Company Company { get; set; }
     }
 }

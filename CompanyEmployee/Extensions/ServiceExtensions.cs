@@ -3,6 +3,7 @@ using Contracts;
 using Entities;
 using LoggingService;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,6 +72,14 @@ namespace CompanyEmployees.Extensions
             {
                 config.OutputFormatters.Add(new CsvCompaniesOutputFormatter());
                 config.OutputFormatters.Add(new CsvEmployeesOutputFormatter());
+            });
+        }
+
+        public static void ConfigureApiBehaviour(this IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(opt =>
+            {
+                opt.SuppressModelStateInvalidFilter = false;
             });
         }
     }

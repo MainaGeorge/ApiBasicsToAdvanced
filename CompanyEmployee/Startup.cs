@@ -27,6 +27,7 @@ namespace CompanyEmployees
         {
 
             services.ConfigureControllers();
+            services.ConfigureApiBehaviour();
             services.ConfigureCors();
             services.ConfigureIisIntegration();
             services.ConfigureLoggerService();
