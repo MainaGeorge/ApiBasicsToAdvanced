@@ -7,6 +7,7 @@ using Entities.Models;
 using Entities.Paging;
 using Entities.RequestParameters;
 using Microsoft.EntityFrameworkCore;
+using Repository.QueryExtensions;
 
 namespace Repository
 {
@@ -21,9 +22,9 @@ namespace Repository
         {
 
             var employees = await FindByCondition(
-                    e => e.CompanyId == companyId && e.Age > requestParameters.MinAge
-                    && e.Age < requestParameters.MaxAge, trackChanges)
-                .OrderBy(e => e.Name)
+                    e => e.CompanyId == companyId, trackChanges)
+                .FilterByAge(requestParameters.MinAge, requestParameters.MaxAge)
+                .SearchEmployeeByName(requestParameters.SearchTerm)
                 .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
                 .Take(requestParameters.PageSize)
                 .ToListAsync();

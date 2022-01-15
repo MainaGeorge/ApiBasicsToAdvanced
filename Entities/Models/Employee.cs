@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    public class Employee
+    public class Employee : BaseItem
     {
         [Column("EmployeeId")]
-        public Guid Id { get; set; }
+        public override Guid Id { get; set; }
 
         [Required(ErrorMessage = "Employee name is a required field")]
         [MaxLength(30, ErrorMessage = "Maximum Length for the name is 30 characters")]
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         [Range(18, int.MaxValue, ErrorMessage = "Age is required and it can't be lower than 18")]
         public int Age { get; set; }

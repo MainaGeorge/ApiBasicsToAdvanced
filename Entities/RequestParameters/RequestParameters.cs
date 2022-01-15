@@ -1,4 +1,4 @@
-﻿namespace Entities.Paging
+﻿namespace Entities.RequestParameters
 {
     public abstract class RequestParameters
     {
@@ -12,5 +12,7 @@
             get => _pageSize;
             set => _pageSize = value > MaxPagSize ? MaxPagSize : value;
         }
+
+        public string SearchTerm { get; set; }
     }
 }

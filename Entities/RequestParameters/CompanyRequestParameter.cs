@@ -1,6 +1,6 @@
 ﻿namespace Entities.RequestParameters
 {
-    public class CompanyRequestParameter : Paging.RequestParameters
+    public class CompanyRequestParameter : RequestParameters
     {
     }
 }

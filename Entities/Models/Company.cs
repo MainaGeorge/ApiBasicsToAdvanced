@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    public class Company
+    public class Company : BaseItem
     {
         [Column("CompanyId")]
-        public Guid Id { get; set; }
+        public override Guid Id { get; set; }
 
         [Required(ErrorMessage = "Company Name is a required field")]
         [MaxLength(60, ErrorMessage = "Maximum Length for the Name is 60 characters")]
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         [Required(ErrorMessage = "Company Address is a required field")]
         [MaxLength(60, ErrorMessage = "Maximum Length for the Name is 60 characters")]

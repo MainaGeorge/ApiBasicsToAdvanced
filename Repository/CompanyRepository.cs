@@ -8,6 +8,7 @@ using Entities.Models;
 using Entities.Paging;
 using Entities.RequestParameters;
 using Microsoft.EntityFrameworkCore;
+using Repository.QueryExtensions;
 
 namespace Repository
 {
@@ -20,6 +21,7 @@ namespace Repository
         public async Task<PagedList<Company>> GetAllCompanies(CompanyRequestParameter parameter, bool trackChanges)
         {
             var companies = await FindAll(trackChanges)
+                .SearchCompanyByName(parameter.SearchTerm)
                 .OrderBy(c => c.Name)
                 .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                 .Take(parameter.PageSize)
