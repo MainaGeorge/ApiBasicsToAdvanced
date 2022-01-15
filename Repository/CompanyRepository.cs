@@ -22,7 +22,7 @@ namespace Repository
         {
             var companies = await FindAll(trackChanges)
                 .SearchCompanyByName(parameter.SearchTerm)
-                .OrderBy(c => c.Name)
+                .OrderByGivenProperties(parameter.OrderBy)
                 .Skip((parameter.PageNumber - 1) * parameter.PageSize)
                 .Take(parameter.PageSize)
                 .ToListAsync();

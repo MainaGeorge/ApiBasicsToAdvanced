@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Linq;
 using Entities.Models;
 using System.Linq.Dynamic.Core;
+using Repository.QueryExtensions.CommonSortingLogic;
 
 namespace Repository.QueryExtensions
 {
@@ -36,30 +34,23 @@ namespace Repository.QueryExtensions
         public static IQueryable<Employee> OrderByGivenProperties(this IQueryable<Employee> source, string propertyNames)
         {
             if (string.IsNullOrWhiteSpace(propertyNames))
-                return source;
+                return source.OrderBy(e => e.Name);
 
             //expected format --> name desc, age asc
-            var orderParameters = propertyNames.Split(',', StringSplitOptions.RemoveEmptyEntries);
-            var propertyInfos = typeof(Employee).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var orderByString = OrderQueryBuilder.CreateOrderQuery<Employee>(propertyNames);
 
-            var orderByStringBuilder = new StringBuilder();
+            return string.IsNullOrWhiteSpace(orderByString) ? source.OrderBy(e => e.Name) : source.OrderBy(orderByString);
+        }
 
-            foreach (var parameter in orderParameters)
-            {
-                var propertyName = parameter.Trim().Split(' ')[0];
+        public static IQueryable<Company> OrderByGivenProperties(this IQueryable<Company> source, string propertyNames)
+        {
+            if (string.IsNullOrWhiteSpace(propertyNames))
+                return source.OrderBy(e => e.Name);
 
-                var objectProperty = propertyInfos.FirstOrDefault(pi =>
-                    pi.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
+            //expected format --> name desc, age asc
+            var orderByString = OrderQueryBuilder.CreateOrderQuery<Company>(propertyNames);
 
-                if (objectProperty is null) continue;
-
-                var direction = parameter.EndsWith(" desc") ? "descending" : "ascending";
-                orderByStringBuilder.Append($"{objectProperty.Name} {direction}, ");
-            }
-
-            var orderByString = orderByStringBuilder.ToString().Trim(' ', ',');
-
-            return string.IsNullOrWhiteSpace(orderByString) ? source : source.OrderBy(orderByString);
+            return string.IsNullOrWhiteSpace(orderByString) ? source.OrderBy(e => e.Name) : source.OrderBy(orderByString);
         }
     }
 }
