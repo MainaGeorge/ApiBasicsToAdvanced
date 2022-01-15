@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "rDBjwRbt/5M8kR/Ln3K4Bpk/Jl8u8VoVqfCKMHM78FCwhczv2pA8iJvvIWnrEDBJi2o1DZRQMHpC2Wf9PelmBg==",
+  "dgSpecHash": "aMbgLKmYkKvBh5C1pGivSHRky217vEXFXJGV+bHOHmMeo6VeQZ+KcIVY1UTezcdOF6a+oTbX1k/KebkUxD2kzw==",
   "success": true,
   "projectFilePath": "C:\\Users\\george.maina\\Desktop\\CompanyEmployee\\Repository\\Repository.csproj",
   "expectedPackageFiles": [
@@ -17,7 +17,8 @@
     "C:\\Users\\george.maina\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\george.maina\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
-    "C:\\Users\\george.maina\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512"
+    "C:\\Users\\george.maina\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
+    "C:\\Users\\george.maina\\.nuget\\packages\\system.linq.dynamic.core\\1.2.15\\system.linq.dynamic.core.1.2.15.nupkg.sha512"
   ],
   "logs": []
 }

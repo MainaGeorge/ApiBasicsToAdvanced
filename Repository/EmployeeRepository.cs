@@ -25,6 +25,7 @@ namespace Repository
                     e => e.CompanyId == companyId, trackChanges)
                 .FilterByAge(requestParameters.MinAge, requestParameters.MaxAge)
                 .SearchEmployeeByName(requestParameters.SearchTerm)
+                .OrderByGivenProperties(requestParameters.OrderBy)
                 .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
                 .Take(requestParameters.PageSize)
                 .ToListAsync();
