@@ -1,4 +1,5 @@
-﻿using CompanyEmployees.CustomOutputFormatters;
+﻿using CompanyEmployees.ActionFilters;
+using CompanyEmployees.CustomOutputFormatters;
 using Contracts;
 using Entities;
 using LoggingService;
@@ -81,6 +82,13 @@ namespace CompanyEmployees.Extensions
             {
                 opt.SuppressModelStateInvalidFilter = true;
             });
+        }
+
+        public static void AddCustomActionFilters(this IServiceCollection services)
+        {
+            services.AddScoped<ValidateModelState>();
+            services.AddScoped<ValidateCompanyExistsAttribute>();
+            services.AddScoped<ValidateEmployeeExistsAttribute>();
         }
     }
 }

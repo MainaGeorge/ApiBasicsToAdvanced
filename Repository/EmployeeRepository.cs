@@ -5,6 +5,7 @@ using Contracts;
 using Entities;
 using Entities.Models;
 using Entities.Paging;
+using Entities.RequestParameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository
@@ -18,7 +19,10 @@ namespace Repository
         public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeRequestParameters requestParameters,
             bool trackChanges)
         {
-            var employees = await FindByCondition(e => e.CompanyId == companyId, trackChanges)
+
+            var employees = await FindByCondition(
+                    e => e.CompanyId == companyId && e.Age > requestParameters.MinAge
+                    && e.Age < requestParameters.MaxAge, trackChanges)
                 .OrderBy(e => e.Name)
                 .Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize)
                 .Take(requestParameters.PageSize)

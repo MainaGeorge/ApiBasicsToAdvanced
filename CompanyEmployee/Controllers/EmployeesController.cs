@@ -6,7 +6,7 @@ using CompanyEmployees.ActionFilters;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using Entities.Paging;
+using Entities.RequestParameters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -33,6 +33,9 @@ namespace CompanyEmployees.Controllers
         public async Task<IActionResult> GetEmployeesForCompany(Guid companyId,
             [FromQuery] EmployeeRequestParameters requestParameters)
         {
+            if (!requestParameters.IsValidAgeRage)
+                return BadRequest($"{requestParameters.MaxAge} can't be less than {requestParameters.MinAge}");
+
             var _ = HttpContext.Items["company"] as Company;
 
             var employeesFromDb = await _repoManager.Employee.GetEmployeesAsync(companyId, requestParameters, false);
