@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using Contracts;
+using Entities.Models;
 
 namespace Repository.DataShaping
 {
@@ -14,13 +14,13 @@ namespace Repository.DataShaping
         {
             Properties = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
         }
-        public IEnumerable<ExpandoObject> ShapeData(IEnumerable<T> entities, string fieldsString)
+        public IEnumerable<Entity> ShapeData(IEnumerable<T> entities, string fieldsString)
         {
             var requiredProperties = GetRequiredProperties(fieldsString);
             return FetchData(entities, requiredProperties);
         }
 
-        public ExpandoObject ShapeData(T entity, string fieldsString)
+        public Entity ShapeData(T entity, string fieldsString)
         {
             var requiredProperties = GetRequiredProperties(fieldsString);
             return FetchDataForEntity(entity, requiredProperties);
@@ -39,9 +39,9 @@ namespace Repository.DataShaping
                       .ToArray();
         }
 
-        private static ExpandoObject FetchDataForEntity(T entity, IEnumerable<PropertyInfo> requiredProperties)
+        private static Entity FetchDataForEntity(T entity, IEnumerable<PropertyInfo> requiredProperties)
         {
-            var shapedObject = new ExpandoObject();
+            var shapedObject = new Entity();
             foreach (var prop in requiredProperties)
             {
                 var propValue = prop.GetValue(entity);
@@ -51,7 +51,7 @@ namespace Repository.DataShaping
             return shapedObject;
         }
 
-        private static IEnumerable<ExpandoObject> FetchData(IEnumerable<T> entities,
+        private static IEnumerable<Entity> FetchData(IEnumerable<T> entities,
             IEnumerable<PropertyInfo> requiredProperties)
         {
             return entities.Select(entity => FetchDataForEntity(entity, requiredProperties)).ToList();
