@@ -22,12 +22,14 @@ namespace CompanyEmployees.Controllers
         private readonly IRepositoryManager _repoManager;
         private readonly IMapper _mapper;
         private readonly ILoggerManager _logger;
+        private readonly IDataShaper<CompanyDto> _dataShaper;
 
-        public CompaniesController(IRepositoryManager repoManager, IMapper mapper, ILoggerManager logger)
+        public CompaniesController(IRepositoryManager repoManager, IMapper mapper, ILoggerManager logger, IDataShaper<CompanyDto> dataShaper)
         {
             _repoManager = repoManager;
             _mapper = mapper;
             _logger = logger;
+            _dataShaper = dataShaper;
         }
 
         [HttpGet]
@@ -41,16 +43,17 @@ namespace CompanyEmployees.Controllers
 
             var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
 
-            return Ok(companiesDto);
+            return Ok(_dataShaper.ShapeData(companiesDto, reqParam.Fields));
         }
 
         [HttpGet("{companyId:guid}", Name = nameof(GetCompany))]
         [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
-        public IActionResult GetCompany(Guid companyId)
+        public IActionResult GetCompany(Guid companyId, [FromQuery] CompanyRequestParameter parameter)
         {
             var company = HttpContext.Items["company"] as Company;
+            var companyDto = _mapper.Map<CompanyDto>(company);
 
-            return Ok(_mapper.Map<CompanyDto>(company));
+            return Ok(_dataShaper.ShapeData(companyDto, parameter.Fields));
         }
 
         [HttpGet("collection/({companyIds})", Name = nameof(GetCompanyCollection))]

@@ -21,12 +21,15 @@ namespace CompanyEmployees.Controllers
         private readonly IRepositoryManager _repoManager;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
+        private readonly IDataShaper<EmployeeDto> _dataShaper;
 
-        public EmployeesController(IRepositoryManager repoManager, ILoggerManager logger, IMapper mapper)
+        public EmployeesController(IRepositoryManager repoManager, ILoggerManager logger, IMapper mapper,
+            IDataShaper<EmployeeDto> dataShaper)
         {
             _repoManager = repoManager;
             _logger = logger;
             _mapper = mapper;
+            _dataShaper = dataShaper;
         }
 
         [HttpGet]
@@ -41,18 +44,18 @@ namespace CompanyEmployees.Controllers
             var employeesFromDb = await _repoManager.Employee.GetEmployeesAsync(companyId, requestParameters, false);
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(employeesFromDb.MetaData));
-
-            return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb));
+            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
+            return Ok(_dataShaper.ShapeData(employeesDto, requestParameters.Fields));
         }
 
         [HttpGet("{employeeId:guid}", Name = nameof(GetEmployeeForCompany))]
         [ServiceFilter(typeof(ValidateEmployeeExistsAttribute))]
-        public IActionResult GetEmployeeForCompany(Guid companyId, Guid employeeId)
+        public IActionResult GetEmployeeForCompany(Guid companyId, Guid employeeId, [FromQuery] EmployeeRequestParameters param)
         {
             var _ = HttpContext.Items["company"] as Company;
             var employeeFromDb = HttpContext.Items["employee"] as Employee;
 
-            return Ok(_mapper.Map<EmployeeDto>(employeeFromDb));
+            return Ok(_dataShaper.ShapeData(_mapper.Map<EmployeeDto>(employeeFromDb), param.Fields));
 
         }
 
