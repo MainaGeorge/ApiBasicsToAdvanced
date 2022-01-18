@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 
 namespace CompanyEmployees.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("api/companies")]
     [ApiController]
     public class CompaniesController : ControllerBase
@@ -32,7 +33,16 @@ namespace CompanyEmployees.Controllers
             _dataShaper = dataShaper;
         }
 
+        [HttpOptions]
+        public IActionResult GetCompaniesOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, PATCH");
+            Response.Headers.ContentLength = 0;
+            return Ok();
+        }
+
         [HttpGet]
+        [HttpHead]
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyRequestParameter reqParam)
         {
             var companies = await _repoManager
@@ -42,8 +52,8 @@ namespace CompanyEmployees.Controllers
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(companies.MetaData));
 
             var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-
-            return Ok(_dataShaper.ShapeData(companiesDto, reqParam.Fields));
+            var shapedEntities = _dataShaper.ShapeData(companiesDto, reqParam.Fields).Select(e => e.Entity);
+            return Ok(shapedEntities);
         }
 
         [HttpGet("{companyId:guid}", Name = nameof(GetCompany))]

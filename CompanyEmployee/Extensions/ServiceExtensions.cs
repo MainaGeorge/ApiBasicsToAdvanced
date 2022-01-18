@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CompanyEmployees.ActionFilters;
+using CompanyEmployees.Controllers;
 using CompanyEmployees.CustomOutputFormatters;
 using Contracts;
 using Entities;
@@ -7,6 +8,7 @@ using LoggingService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -109,6 +111,17 @@ namespace CompanyEmployees.Extensions
                     .OfType<XmlDataContractSerializerInputFormatter>()
                     ?.FirstOrDefault();
 
+            });
+        }
+
+        public static void ConfigureApiVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
         }
     }

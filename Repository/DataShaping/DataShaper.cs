@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Contracts;
 using Entities.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Repository.DataShaping
 {
@@ -51,10 +50,10 @@ namespace Repository.DataShaping
                 shapedObject.Entity.TryAdd(prop.Name, propValue);
             }
 
-            var entityIdProperty = entity.GetType().GetProperty("Id", BindingFlags.IgnoreCase);
+            //var entityIdProperty = entity.GetType().GetProperty("Id", BindingFlags.IgnoreCase);
 
-            if (entityIdProperty is not null)
-                shapedObject.Id = (Guid)entityIdProperty!.GetValue(entity)!;
+            //if (entityIdProperty is not null)
+            //    shapedObject.Id = (Guid)entityIdProperty!.GetValue(entity)!;
 
             return shapedObject;
         }

@@ -40,7 +40,7 @@ namespace CompanyEmployees
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<EmployeeLinks>();
             services.AddCustomMediaTypes();
-
+            services.ConfigureApiVersioning();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CompanyEmployee", Version = "v1" });

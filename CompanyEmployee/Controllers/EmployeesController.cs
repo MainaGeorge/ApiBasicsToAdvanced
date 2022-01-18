@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CompanyEmployees.ActionFilters;
@@ -15,6 +16,7 @@ using Newtonsoft.Json;
 namespace CompanyEmployees.Controllers
 {
     [Route("api/companies/{companyId:guid}/employees")]
+    [ApiVersion("1.0")]
     [ApiController]
     [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
     public class EmployeesController : ControllerBase
@@ -36,6 +38,7 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet]
+        [HttpHead]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetEmployeesForCompany(Guid companyId,
             [FromQuery] EmployeeRequestParameters requestParameters)
@@ -44,13 +47,13 @@ namespace CompanyEmployees.Controllers
                 return BadRequest($"{requestParameters.MaxAge} can't be less than {requestParameters.MinAge}");
 
             var _ = HttpContext.Items["company"] as Company;
-
             var employeesFromDb = await _repoManager.Employee.GetEmployeesAsync(companyId, requestParameters, false);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(employeesFromDb.MetaData));
+
             var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
+            var shapedEmployees = _dataShaper.ShapeData(employeesDto, requestParameters.Fields).Select(e => e.Entity);
 
-            var links = _employeeLinks.TryGenerateLinks(employeesDto, requestParameters.Fields, companyId, HttpContext);
-
-            return links.HasLinks ? Ok(links.LinkedEntities) : Ok(links.ShapedEntities);
+            return Ok(shapedEmployees);
         }
 
         [HttpGet("{employeeId:guid}", Name = nameof(GetEmployeeForCompany))]
