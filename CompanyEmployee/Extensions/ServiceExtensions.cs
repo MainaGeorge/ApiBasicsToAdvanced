@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AspNetCoreRateLimit;
 using CompanyEmployees.ActionFilters;
-using CompanyEmployees.Controllers;
 using CompanyEmployees.CustomOutputFormatters;
 using CompanyEmployees.Utility;
 using Contracts;
@@ -151,8 +152,29 @@ namespace CompanyEmployees.Extensions
             services.AddScoped<IDataShaper<CompanyDto>, DataShaper<CompanyDto>>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
             services.AddScoped<EmployeeLinks>();
+        }
 
+        public static void ConfigureRateLimitingOptions(this IServiceCollection services)
+        {
 
+            var rateLimitRules = new List<RateLimitRule>
+            {
+                new RateLimitRule
+                {
+                    Endpoint = "*",
+                    Limit = 3,
+                    Period = "5m"
+                }
+            };
+
+            services.Configure<IpRateLimitOptions>(opts =>
+            {
+                opts.GeneralRules = rateLimitRules;
+            });
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
         }
     }
 }
