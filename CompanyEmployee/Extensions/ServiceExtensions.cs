@@ -2,9 +2,12 @@
 using CompanyEmployees.ActionFilters;
 using CompanyEmployees.Controllers;
 using CompanyEmployees.CustomOutputFormatters;
+using CompanyEmployees.Utility;
 using Contracts;
 using Entities;
+using Entities.DataTransferObjects;
 using LoggingService;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -13,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repository;
+using Repository.DataShaping;
 
 namespace CompanyEmployees.Extensions
 {
@@ -54,17 +58,13 @@ namespace CompanyEmployees.Extensions
             });
         }
 
-        public static void ConfigureRepositoryManager(this IServiceCollection services)
-        {
-            services.AddScoped<IRepositoryManager, RepositoryManager>();
-        }
-
         public static void ConfigureControllers(this IServiceCollection services)
         {
             services.AddControllers(options =>
                     {
                         options.RespectBrowserAcceptHeader = true;
                         options.ReturnHttpNotAcceptable = true;
+                        options.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
                     })
                 .AddNewtonsoftJson()
                 .AddXmlDataContractSerializerFormatters()
@@ -123,6 +123,36 @@ namespace CompanyEmployees.Extensions
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
+        }
+
+        public static void ConfigureResponseCaching(this IServiceCollection services)
+        {
+            services.AddResponseCaching();
+        }
+
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+        {
+            services.AddHttpCacheHeaders(
+                expirationOptions =>
+                    {
+                        expirationOptions.MaxAge = 120;
+                        expirationOptions.CacheLocation = CacheLocation.Public;
+                    },
+                validationOptions =>
+                        {
+                            validationOptions.MustRevalidate = true;
+                        }
+                );
+        }
+
+        public static void AddCustomServicesToTheDependencyInjectionContainer(this IServiceCollection services)
+        {
+            services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+            services.AddScoped<IDataShaper<CompanyDto>, DataShaper<CompanyDto>>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+            services.AddScoped<EmployeeLinks>();
+
+
         }
     }
 }
