@@ -1,10 +1,12 @@
-﻿using CompanyEmployees.ActionFilters;
+﻿using System.Linq;
+using CompanyEmployees.ActionFilters;
 using CompanyEmployees.CustomOutputFormatters;
 using Contracts;
 using Entities;
 using LoggingService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +91,25 @@ namespace CompanyEmployees.Extensions
             services.AddScoped<ValidateModelState>();
             services.AddScoped<ValidateCompanyExistsAttribute>();
             services.AddScoped<ValidateEmployeeExistsAttribute>();
+            services.AddScoped<ValidateMediaTypeAttribute>();
+        }
+
+        public static void AddCustomMediaTypes(this IServiceCollection services)
+        {
+            services.Configure<MvcOptions>(config =>
+            {
+                var newtonsoftJsonOutputFormatter = config
+                    .OutputFormatters.OfType<NewtonsoftJsonOutputFormatter>()
+                    ?.FirstOrDefault();
+
+                newtonsoftJsonOutputFormatter?.SupportedMediaTypes
+                    .Add("application/vnd.codemaze.hateos+json");
+
+                var xmlOutputFormatter = config.OutputFormatters
+                    .OfType<XmlDataContractSerializerInputFormatter>()
+                    ?.FirstOrDefault();
+
+            });
         }
     }
 }

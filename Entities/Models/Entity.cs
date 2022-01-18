@@ -5,19 +5,18 @@ using System.Dynamic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Entities.LinkModels;
 
+#nullable disable
 namespace Entities.Models
 {
     public class Entity : DynamicObject, IXmlSerializable, IDictionary<string, object>
     {
         private readonly string _root = "Entity";
         private readonly IDictionary<string, object> _expando;
-        public Entity()
-        {
-            _expando = new ExpandoObject();
-        }
+        public Entity() => _expando = new ExpandoObject();
 
-        public override bool TryGetMember(GetMemberBinder binder, out object? result)
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             if (!_expando.TryGetValue(binder.Name, out var value)) return base.TryGetMember(binder, out result);
 
@@ -25,7 +24,7 @@ namespace Entities.Models
             return true;
         }
 
-        public XmlSchema? GetSchema()
+        public XmlSchema GetSchema()
         {
             throw new System.NotImplementedException();
         }
@@ -60,8 +59,24 @@ namespace Entities.Models
         private static void WriteLinksToXml(string key, object value, XmlWriter writer)
         {
             writer.WriteStartElement(key);
-            writer.WriteString(value.ToString());
+            if (value.GetType() == typeof(List<Link>))
+            {
+                foreach (var val in (List<Link>)value)
+                {
+                    writer.WriteStartElement(nameof(Link));
+                    WriteLinksToXml(nameof(val.Href), val.Href, writer);
+                    WriteLinksToXml(nameof(val.Method), val.Method, writer);
+                    WriteLinksToXml(nameof(val.Rel), val.Rel, writer);
+                    writer.WriteEndElement();
+                }
+            }
+            else
+            {
+                writer.WriteString(value.ToString());
+            }
+
             writer.WriteEndElement();
+
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
