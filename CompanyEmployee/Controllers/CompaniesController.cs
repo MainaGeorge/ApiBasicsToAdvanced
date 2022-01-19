@@ -9,6 +9,7 @@ using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Entities.RequestParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -41,7 +42,7 @@ namespace CompanyEmployees.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         [HttpHead]
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyRequestParameter reqParam)
         {

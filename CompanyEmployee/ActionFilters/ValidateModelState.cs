@@ -19,11 +19,15 @@ namespace CompanyEmployees.ActionFilters
             var controller = context.RouteData.Values["controller"];
 
             var passedDto = context.ActionArguments
-                .Values
-                .SingleOrDefault(x => x.ToString()!.Contains("Dto"));
+                .Values;
 
+            if (!passedDto.Any())
+            {
+                _logger.LogError($"no object was passed in the action {action} of the controller{controller}");
+                context.Result = new BadRequestObjectResult($"no object was passed to the action {action}");
+            }
 
-            if (passedDto is null)
+            if (passedDto.SingleOrDefault(x => x.ToString()!.Contains("Dto")) is null)
             {
                 _logger.LogError($"object sent by the client is null. Controller {controller}, action {action}");
                 context.Result = new BadRequestObjectResult($"object is null. controller {controller}, action {action}");
