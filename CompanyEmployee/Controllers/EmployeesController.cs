@@ -10,6 +10,7 @@ using Entities.DataTransferObjects;
 using Entities.Models;
 using Entities.RequestParameters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -20,7 +21,8 @@ namespace CompanyEmployees.Controllers
     [ApiVersion("1.0")]
     [ApiController]
     [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
-    [Authorize]
+    [Authorize(Roles = "Manager,Administrator")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class EmployeesController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;
@@ -41,6 +43,7 @@ namespace CompanyEmployees.Controllers
 
         [HttpGet]
         [HttpHead]
+        [ProducesResponseType(typeof(IEnumerable<Entity>), StatusCodes.Status200OK)]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetEmployeesForCompany(Guid companyId,
             [FromQuery] EmployeeRequestParameters requestParameters)
@@ -59,6 +62,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet("{employeeId:guid}", Name = nameof(GetEmployeeForCompany))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Entity), StatusCodes.Status200OK)]
         [ServiceFilter(typeof(ValidateEmployeeExistsAttribute))]
         public IActionResult GetEmployeeForCompany(Guid companyId, Guid employeeId, [FromQuery] EmployeeRequestParameters param)
         {
@@ -70,6 +75,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ServiceFilter(typeof(ValidateModelState))]
         public async Task<IActionResult> CreateEmployeeForCompany([FromRoute] Guid companyId, [FromBody] EmployeeForCreationDto employeeDto)
         {
@@ -84,6 +91,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpDelete("{employeeId:guid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ServiceFilter(typeof(ValidateEmployeeExistsAttribute))]
         public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid employeeId)
         {
@@ -98,6 +107,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPut("{employeeId:guid}")]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ServiceFilter(typeof(ValidateModelState))]
         [ServiceFilter(typeof(ValidateEmployeeExistsAttribute))]
         public async Task<IActionResult> UpdateEmployeeForCompany(Guid companyId, Guid employeeId,
@@ -113,6 +125,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPatch("{employeeId:guid}")]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ServiceFilter(typeof(ValidateModelState))]
         [ServiceFilter(typeof(ValidateEmployeeExistsAttribute))]
         public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(Guid companyId, Guid employeeId,

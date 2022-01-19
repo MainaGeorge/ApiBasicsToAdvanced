@@ -10,6 +10,7 @@ using Entities.DataTransferObjects;
 using Entities.Models;
 using Entities.RequestParameters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -19,7 +20,9 @@ namespace CompanyEmployees.Controllers
     [ApiVersion("1.0")]
     [Route("api/companies")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class CompaniesController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;
@@ -45,6 +48,7 @@ namespace CompanyEmployees.Controllers
 
         [HttpGet]
         [HttpHead]
+        [ProducesResponseType(typeof(IEnumerable<Entity>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyRequestParameter reqParam)
         {
             var companies = await _repoManager
@@ -60,6 +64,8 @@ namespace CompanyEmployees.Controllers
 
         [HttpGet("{companyId:guid}", Name = nameof(GetCompany))]
         [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Entity), StatusCodes.Status200OK)]
         public IActionResult GetCompany(Guid companyId, [FromQuery] CompanyRequestParameter parameter)
         {
             var company = HttpContext.Items["company"] as Company;
@@ -69,6 +75,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpGet("collection/({companyIds})", Name = nameof(GetCompanyCollection))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<CompanyDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCompanyCollection(
             [ModelBinder(BinderType = typeof(ConvertGuidIdsToIEnumerableOfGuidModelBinder))] IEnumerable<Guid> companyIds)
         {
@@ -93,6 +101,8 @@ namespace CompanyEmployees.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidateModelState))]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
             var companyEntity = _mapper.Map<Company>(company);
@@ -125,6 +135,8 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpDelete("{companyId:guid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
         public async Task<IActionResult> DeleteCompany(Guid companyId)
         {
@@ -136,6 +148,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPut("{companyId:guid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ServiceFilter(typeof(ValidateModelState))]
         [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
         public async Task<IActionResult> UpdateCompany(Guid companyId, [FromBody] CompanyForUpdatingDto companyForUpdatingDto)
@@ -148,6 +163,9 @@ namespace CompanyEmployees.Controllers
         }
 
         [HttpPatch("{companyId:guid}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ServiceFilter(typeof(ValidateModelState))]
         [ServiceFilter(typeof(ValidateCompanyExistsAttribute))]
         public async Task<IActionResult> PartiallyUpdateCompany(Guid companyId,
