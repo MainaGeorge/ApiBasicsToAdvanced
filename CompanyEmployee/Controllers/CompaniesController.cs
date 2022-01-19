@@ -19,6 +19,7 @@ namespace CompanyEmployees.Controllers
     [ApiVersion("1.0")]
     [Route("api/companies")]
     [ApiController]
+    [Authorize]
     public class CompaniesController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;
@@ -42,7 +43,7 @@ namespace CompanyEmployees.Controllers
             return Ok();
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         [HttpHead]
         public async Task<IActionResult> GetCompanies([FromQuery] CompanyRequestParameter reqParam)
         {

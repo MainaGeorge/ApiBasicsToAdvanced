@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Repository;
 using Repository.DataShaping;
 
@@ -72,7 +73,7 @@ namespace CompanyEmployees.Extensions
                         options.ReturnHttpNotAcceptable = true;
                         options.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
                     })
-                .AddNewtonsoftJson()
+                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
                 .AddXmlDataContractSerializerFormatters()
                 .AddCustomCsvFormatter();
         }
@@ -157,6 +158,7 @@ namespace CompanyEmployees.Extensions
             services.AddScoped<IDataShaper<CompanyDto>, DataShaper<CompanyDto>>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
             services.AddScoped<EmployeeLinks>();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
         }
 
         public static void ConfigureRateLimitingOptions(this IServiceCollection services)

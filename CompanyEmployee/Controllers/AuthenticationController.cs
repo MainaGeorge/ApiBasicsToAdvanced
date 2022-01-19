@@ -19,14 +19,16 @@ namespace CompanyEmployees.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAuthenticationManager _authManager;
 
         public AuthenticationController(ILoggerManager logger, IMapper mapper, UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, IAuthenticationManager authManager)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+            _authManager = authManager;
         }
 
         [ServiceFilter(typeof(ValidateModelState))]
@@ -50,10 +52,21 @@ namespace CompanyEmployees.Controllers
 
             foreach (var role in userForRegistration.Roles)
             {
+                if (!await _roleManager.RoleExistsAsync(role)) continue;
                 await _userManager.AddToRoleAsync(user, role);
             }
 
             return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPost("login")]
+        [ServiceFilter(typeof(ValidateModelState))]
+        public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticatingDto user)
+        {
+            if (await _authManager.ValidateUser(user)) return Ok(new { Token = await _authManager.CreateToken() });
+
+            _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong username or password");
+            return Unauthorized();
         }
     }
 }
